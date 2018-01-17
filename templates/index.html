@@ -2,10 +2,16 @@
 
 {% block body %}
 
-<h1>Products</h1>
-
-{% for product in products %}
-    <p>{{ product.name }}, £{{ product.price }}</p>
-{% endfor %}
+<div class="jumbotron">
+    <h1 class="display-3">shoppingsubs</h1>
+    <p class="lead">Want to know when your favourite branded grocery products go on offer?</p>
+    <hr class="my-4">
+    <p>We only use Tesco at the moment but we plan to bring other suprmarkets on board real soon</p>
+    <hr class="my-4">
+    <p class="lead">
+      <a class="btn btn-primary btn-lg" href="/register" role="button">Register</a>
+      <a class="btn btn-primary btn-lg" href="/products" role="button">Get Started...</a>
+    </p>
+</div>
 
 {% endblock %}

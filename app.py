@@ -17,7 +17,7 @@ APP.debug = True
 
 @APP.route('/')
 def index():
-    return render_template('index.html', products = maindata.getProducts('broccoli'))
+    return render_template('index.html')
 
 class RegisterForm(Form):
     name = StringField('Name', [validators.Length(min=1, max=50)])
@@ -48,9 +48,9 @@ def register():
         return redirect(url_for('index'))
     return render_template('register.html', form = form)
 
-@APP.route('/orders')
-def orders():
-    return render_template('orders.html')
+@APP.route('/products')
+def products():
+    return render_template('products.html', productslist = maindata.getProducts('broccoli'))
 
 if __name__ == '__main__':
     APP.run()
