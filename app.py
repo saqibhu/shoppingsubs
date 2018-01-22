@@ -4,6 +4,7 @@ from sqlalchemy import create_engine
 
 from wtforms import Form, StringField, TextAreaField, PasswordField, validators
 from passlib.hash import sha256_crypt
+import psycopg2
 import maindata
 
 APP = Flask(__name__)
@@ -11,6 +12,11 @@ APP.secret_key = 'test'
 
 #config postgresql
 engine = create_engine('postgresql://saqib:welcome.1@localhost/shoppingsubs')
+
+try:
+    conn = psycopg2.connect("dbname='shoppingsubs' user='saqib' host='localhost' password='welcome.1'")
+except:
+    print "I am unable to connect to the database"
 
 #switch on debug
 APP.debug = True
@@ -29,7 +35,7 @@ class RegisterForm(Form):
         ])
     confirm = PasswordField('Confirm Password')
 
-@APP.route('/register', methods = ['GET','POST'])
+@APP.route('/register', methods = ['GET', 'POST'])
 def register():
     form = RegisterForm(request.form)
     if request.method == 'POST' and form.validate():
@@ -43,10 +49,40 @@ def register():
         connection.execute('insert into users (name, email, username, password) values (%s, %s, %s, %s)', (name, email, username, password))
         connection.close()
 
-        flash('You are now registered', 'sucess')
+        flash('You are now registered', 'success')
 
-        return redirect(url_for('index'))
+        return redirect(url_for('login'))
     return render_template('register.html', form = form)
+
+@APP.route('/login', methods = ['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        #Get form fields
+        username = request.form['username']
+        password_candidate = request.form['password']
+
+        cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        cur.execute("""select * from users where username = '%s'""" % username)
+        result = cur.fetchone()
+
+        if result > 0:
+            password = result['password']
+
+            #Compare password
+            if sha256_crypt.verify(password_candidate, password):
+                #Passed
+            else:
+                error = 'Invalid password'
+                return render_template('login.html', error = error)
+        else:
+            error = 'Username not found'
+            return render_template('login.html',error = error)
+
+        #where do I close the db connection
+        #cur.close()
+
+
+    return render_template('login.html')
 
 @APP.route('/products')
 def products():
