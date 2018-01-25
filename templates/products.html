@@ -2,10 +2,36 @@
 
 {% block body %}
 
-<h1>Products</h1>
+<form class="form-horizontal" method="post" action="/products">
+    <fieldset>
 
-{% for product in productslist %}
-    <p>{{ product.name }}, £{{ product.price }}</p>
-{% endfor %}
+        <!-- Form Name -->
+        <legend></legend>
+
+        <!-- Text input-->
+        <div class="form-group">
+            <div class="col-md-4">
+                <input id="txtProduct" name="inputProduct" type="text" placeholder="Enter product to search for" class="form-control input-md">
+            </div>
+        </div>
+
+        <!-- Button -->
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="singlebutton"></label>
+            <div class="col-md-4">
+                <input id="singlebutton" name="singlebutton" class="btn btn-primary" type="submit" value="Search" />
+            </div>
+        </div>
+
+    </fieldset>
+</form>
+
+{% if productslist %}
+<ul>
+    {% for product in productslist %}
+    <li>{{ product.name }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
 
 {% endblock %}

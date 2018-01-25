@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, url_for, flash, logging, request
+from flask import Flask, render_template, redirect, url_for, flash, logging, request, session
 #from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import create_engine
 
@@ -70,10 +70,17 @@ def login():
 
             #Compare password
             if sha256_crypt.verify(password_candidate, password):
-                #Passed
+                session['logged_in'] = True
+                session['username'] = username
+
+                flash('You are now logged in', 'success')
+                return redirect(url_for('products'))
             else:
                 error = 'Invalid password'
                 return render_template('login.html', error = error)
+
+            #Close connection
+            cur.close()
         else:
             error = 'Username not found'
             return render_template('login.html',error = error)
@@ -84,9 +91,12 @@ def login():
 
     return render_template('login.html')
 
-@APP.route('/products')
+@APP.route('/products', methods = ['GET', 'POST'])
 def products():
-    return render_template('products.html', productslist = maindata.getProducts('broccoli'))
+    if request.method == 'POST':
+        return render_template('products.html', productslist = maindata.getProducts(request.form['inputProduct']))
+    else:
+        return render_template('products.html')
 
 if __name__ == '__main__':
     APP.run()
