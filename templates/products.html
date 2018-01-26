@@ -11,7 +11,7 @@
         <!-- Text input-->
         <div class="form-group">
             <div class="col-md-4">
-                <input id="txtProduct" name="inputProduct" type="text" placeholder="Enter product to search for" class="form-control input-md">
+                <input id="txtProduct" name="inputProduct" type="text" placeholder="Enter product to search for" class="form-control">
             </div>
         </div>
 
@@ -27,11 +27,18 @@
 </form>
 
 {% if productslist %}
-<ul>
-    {% for product in productslist %}
-    <li>{{ product.name }}</li>
-    {% endfor %}
-</ul>
+<table id='listProducts' class='table'>
+    <thead>
+        <tr><th>Name</th></tr>
+    </thead>
+    <tbody>
+        {% for product in productslist %}
+        <tr>
+            <td>{{ product.name }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
 {% endif %}
 
 {% endblock %}
