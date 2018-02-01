@@ -29,12 +29,18 @@
 {% if productslist %}
 <table id='listProducts' class='table'>
     <thead>
-        <tr><th>Name</th></tr>
+        <tr>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Sub/Unsub</th>
+        </tr>
     </thead>
     <tbody>
         {% for product in productslist %}
         <tr>
             <td>{{ product.name }}</td>
+            <td>£{{ product.price }}</td>
+            <td><input type='button' id='subscribe' value='subscribe'></td>
         </tr>
         {% endfor %}
     </tbody>

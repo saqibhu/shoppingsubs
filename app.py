@@ -4,6 +4,8 @@ from sqlalchemy import create_engine
 
 from wtforms import Form, StringField, TextAreaField, PasswordField, validators
 from passlib.hash import sha256_crypt
+from functools import wraps
+
 import psycopg2
 import maindata
 
@@ -83,7 +85,7 @@ def login():
             cur.close()
         else:
             error = 'Username not found'
-            return render_template('login.html',error = error)
+            return render_template('login.html', error = error)
 
         #where do I close the db connection
         #cur.close()
@@ -91,7 +93,26 @@ def login():
 
     return render_template('login.html')
 
+#Check if user logged in
+def is_logged_in(f):
+    @wraps(f)
+    def wrap(*args, **kwargs):
+        if 'logged_in' in session:
+            return f(*args, **kwargs)
+        else:
+            flash('Unauthorize, please login', 'danger')
+            return redirect(url_for('login'))
+    return wrap
+
+#Logout
+@APP.route('/logout')
+def logout():
+    session.clear()
+    flash('You are now logged out', 'success')
+    return redirect(url_for('login'))
+
 @APP.route('/products', methods = ['GET', 'POST'])
+@is_logged_in
 def products():
     if request.method == 'POST':
         return render_template('products.html', productslist = maindata.getProducts(request.form['inputProduct']))
