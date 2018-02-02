@@ -9,8 +9,12 @@
     <p>We only use Tesco at the moment but we plan to bring other suprmarkets on board real soon</p>
     <hr class="my-4">
     <p class="lead">
-      <a class="btn btn-primary btn-lg" href="/register" role="button">Register</a>
-      <a class="btn btn-primary btn-lg" href="/products" role="button">Get Started...</a>
+      {% if session.logged_in == NULL %}
+        <a class="btn btn-primary btn-lg" href="/register" role="button">Register</a>
+        <a class="btn btn-primary btn-lg" href="/login" role="button">Login</a>
+      {% else %}
+        <a class="btn btn-primary btn-lg" href="/products" role="button">Go to Products.</a>
+      {% endif %}
     </p>
 </div>
 

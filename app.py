@@ -106,18 +106,28 @@ def is_logged_in(f):
 
 #Logout
 @APP.route('/logout')
+@is_logged_in
 def logout():
     session.clear()
     flash('You are now logged out', 'success')
     return redirect(url_for('login'))
 
-@APP.route('/products', methods = ['GET', 'POST'])
+@APP.route('/products', methods=['GET', 'POST'])
 @is_logged_in
 def products():
     if request.method == 'POST':
         return render_template('products.html', productslist = maindata.getProducts(request.form['inputProduct']))
     else:
         return render_template('products.html')
+
+@APP.route('/subscribe', methods=['GET','POST'])
+@is_logged_in
+def subscribe():
+    if request.method == 'POST':
+        print 'Woohoo - Request is ' + request.form['name'] + ' ' +  request.form['price']
+    
+    #return to a modal here
+    return redirect(url_for('products'))
 
 if __name__ == '__main__':
     APP.run()
