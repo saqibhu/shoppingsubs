@@ -30,17 +30,20 @@
 <table id='listProducts' class='table'>
     <thead>
         <tr>
+            <th>Id</th>
             <th>Name</th>
             <th>Price</th>
+            <th>Image</th>
             <th>Sub/Unsub</th>
         </tr>
     </thead>
     <tbody>
         {% for product in productslist %}
         <tr>
+            <td>{{ product.id }}</td>
             <td>{{ product.name }}</td>
             <td>£{{ product.price }}</td>
-            <!--<td><input id='subscribe' type='button' value='Subscribe'></td>-->
+            <td><img src="{{ product.image }}" alt="{{ product.name }}"></td>
             <td></td>
         </tr>
         {% endfor %}
@@ -55,7 +58,6 @@
         <!-- Modal content-->
         <div class="modal-content">
         <div class="modal-header">
-            <!--<button type="button" class="close" data-dismiss="modal">&times;</button>-->
             <h4 class="modal-title">Completed</h4>
         </div>
         <div class="modal-body">

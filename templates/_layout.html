@@ -35,17 +35,17 @@
 
         $('#listProducts tbody').on( 'click', 'button', function () {
             var rowData = table.row( $(this).parents('tr') ).data();
-            //console.log( data[0] +" - "+ data[1] );
 
             $.ajax({
                 data: {
-                    name: rowData[0],
-                    price: rowData[1]
+                    id: rowData[0],
+                    name: rowData[1],
+                    price: rowData[2]
                 },
                 type: 'POST',
                 url: '/subscribe',
                 success: function(response) {
-                    $("#productName").text(rowData[0])
+                    $("#productName").text(rowData[1])
                     $("#subscribeModal").modal('show');
                 }
             });

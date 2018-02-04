@@ -124,9 +124,10 @@ def products():
 @is_logged_in
 def subscribe():
     if request.method == 'POST':
-        print 'Woohoo - Request is ' + request.form['name'] + ' ' +  request.form['price']
+        print 'Woohoo - Request is ' + request.form['name'] + ' ' +  request.form['price'] + ' with an id of ' + request.form['id']
     
-    #return to a modal here
+    #Add subscription to database
+
     return redirect(url_for('products'))
 
 if __name__ == '__main__':
