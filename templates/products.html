@@ -40,7 +40,8 @@
         <tr>
             <td>{{ product.name }}</td>
             <td>£{{ product.price }}</td>
-            <td><input id='subscribe' type='button' value='Subscribe'></td>
+            <!--<td><input id='subscribe' type='button' value='Subscribe'></td>-->
+            <td></td>
         </tr>
         {% endfor %}
     </tbody>
@@ -54,11 +55,11 @@
         <!-- Modal content-->
         <div class="modal-content">
         <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal">&times;</button>
-            <h4 class="modal-title">Modal Header</h4>
+            <!--<button type="button" class="close" data-dismiss="modal">&times;</button>-->
+            <h4 class="modal-title">Completed</h4>
         </div>
         <div class="modal-body">
-            <p>Some text in the modal.</p>
+            <p>You have subscribed to <strong><span id='productName'></span></strong>.</p>
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

@@ -29,7 +29,7 @@
                 "columnDefs": [ {
                 "targets": -1,
                 "data": null,
-                "defaultContent": "<button>Subscribe</button>"
+                "defaultContent": "<button class='btn btn-success'>Subscribe</button>"
                 } ]
             });
 
@@ -44,7 +44,8 @@
                 },
                 type: 'POST',
                 url: '/subscribe',
-                success: function(data) {
+                success: function(response) {
+                    $("#productName").text(rowData[0])
                     $("#subscribeModal").modal('show');
                 }
             });
