@@ -30,7 +30,7 @@
 <table id='listProducts' class='table'>
     <thead>
         <tr>
-            <th>Id</th>
+            <th style="display:none;">Id</th>
             <th>Name</th>
             <th>Price</th>
             <th>Image</th>
@@ -40,7 +40,7 @@
     <tbody>
         {% for product in productslist %}
         <tr>
-            <td>{{ product.id }}</td>
+            <td style="display:none;">{{ product.id }}</td>
             <td>{{ product.name }}</td>
             <td>£{{ product.price }}</td>
             <td><img src="{{ product.image }}" alt="{{ product.name }}"></td>

@@ -124,10 +124,28 @@ def products():
 @is_logged_in
 def subscribe():
     if request.method == 'POST':
-        print 'Woohoo - Request is ' + request.form['name'] + ' ' +  request.form['price'] + ' with an id of ' + request.form['id']
-    
-    #Add subscription to database
+        #print 'Woohoo - Request is ' + request.form['name'] + ' ' +  request.form['price'] + ' with an id of ' + request.form['id']
+        productName = request.form['name']
+        productPrice = request.form['price']
+        productId = request.form['id']
+        productImage = request.form['image']
 
+        #Get id for user account
+        cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        cur.execute("""select * from users where username = '%s'""" % session['username'])
+        result = cur.fetchone()
+
+        if result > 0:
+            userId = result['id']
+            #print userId
+            cur.execute("""insert into subscriptions (productid, productname, productprice, productimage, userid) values (%s, %s, %s, %s, %s)""", (productId, productName, productPrice, productImage, userId))
+        else:
+            print 'Could not get user id'
+    else:
+        print 'Method is not a post'
+
+    conn.commit()
+    cur.close()
     return redirect(url_for('products'))
 
 if __name__ == '__main__':
