@@ -17,8 +17,9 @@
     <script src="http://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/js/bootstrap.min.js" integrity="sha384-a5N7Y/aK3qNeh15eJKGWxsqtnX/wWdSZSKp+81YjTmS15nvnvxKHuzaWwXHDli+4" crossorigin="anonymous"></script>
-    <!--<script type = "text/javascript" src = "{{ url_for('static', filename = 'products.js') }}" ></script>-->
     <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+    <script src="//cdn.datatables.net/plug-ins/1.10.16/api/fnReloadAjax.js"></script>
+    <!--<script type = "text/javascript" src = "{{ url_for('static', filename = 'products.js') }}" ></script>-->
     <script>
         /*$(document).ready(function(){
             $('#listProducts').DataTable(); 
@@ -39,16 +40,19 @@
             $.ajax({
                 data: {
                     id: rowData[0],
-                    subscribed: rowData[1],
-                    name: rowData[2],
-                    price: rowData[3],
-                    image: rowData[4]
+                    search: rowData[1],
+                    subscribed: rowData[2],
+                    name: rowData[3],
+                    price: rowData[4],
+                    image: rowData[5]
                 },
                 type: 'POST',
                 url: '/subscribe',
                 success: function(response) {
-                    $("#productName").text(rowData[2])
-                    $("#subscribeModal").modal('show');
+                    //$("#productName").text(rowData[3])
+                    //$("#subscribeModal").modal('show');
+                    //table.fnReloadAjax();
+                    location.reload();
                 }
             });
         });

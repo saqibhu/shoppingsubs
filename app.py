@@ -125,10 +125,11 @@ def logout():
     flash('You are now logged out', 'success')
     return redirect(url_for('login'))
 
-@APP.route('/products', methods=['GET', 'POST'])
+@APP.route('/products', defaults={'search': None}, methods=['GET', 'POST'])
+@APP.route('/products/<search>', methods=['GET', 'POST'])
 @is_logged_in
-def products():
-    if request.method == 'POST':
+def products(search):
+    if (request.method == 'POST') or (search):
         cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
         cur.execute("""select * from users where username = '%s'""" % session['username'])
         result = cur.fetchone()
@@ -138,7 +139,11 @@ def products():
             print 'No user'
         
         #check for existing subscriptions
-        originalData = maindata.getProducts(request.form['inputProduct'])
+        if not search:
+            originalData = maindata.getProducts(request.form['inputProduct'])
+        else:
+            originalData = maindata.getProducts(search)
+
         amendedData = []
 
         for data in originalData:
@@ -148,6 +153,11 @@ def products():
                 data['subscribed'] = 'Yes'
             else:
                 data['subscribed'] = 'No'
+            
+            if not search:
+                data['search'] = request.form['inputProduct']
+            else:
+                data['search'] = search
     
             amendedData.append(data)
     
