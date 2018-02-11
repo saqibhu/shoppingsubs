@@ -5,8 +5,9 @@ from sqlalchemy import create_engine
 from wtforms import Form, StringField, TextAreaField, PasswordField, validators
 from passlib.hash import sha256_crypt
 from functools import wraps
-
+import json
 import psycopg2
+
 import maindata
 
 APP = Flask(__name__)
@@ -22,6 +23,18 @@ except:
 
 #switch on debug
 APP.debug = True
+
+#Custom functions
+def isProductSubscribed(userid, productid):
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    cur.execute("""select * from subscriptions where userid = '%s' and productid ='%s'""" % (userid, productid))
+    subscriptions = cur.fetchone()
+
+    if subscriptions > 0:
+        return True
+    else:
+        return False
+#end custom functions
 
 @APP.route('/')
 def index():
@@ -116,9 +129,32 @@ def logout():
 @is_logged_in
 def products():
     if request.method == 'POST':
-        return render_template('products.html', productslist = maindata.getProducts(request.form['inputProduct']))
+        cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        cur.execute("""select * from users where username = '%s'""" % session['username'])
+        result = cur.fetchone()
+        if result > 0:
+            userId = result['id']
+        else:
+            print 'No user'
+        
+        #check for existing subscriptions
+        originalData = maindata.getProducts(request.form['inputProduct'])
+        amendedData = []
+
+        for data in originalData:
+            isSubscribed = isProductSubscribed(userId, data['id'])
+
+            if isSubscribed:
+                data['subscribed'] = 'Yes'
+            else:
+                data['subscribed'] = 'No'
+    
+            amendedData.append(data)
+    
+        return render_template('products.html', productslist = amendedData)
     else:
         return render_template('products.html')
+
 
 @APP.route('/subscribe', methods=['GET','POST'])
 @is_logged_in
@@ -137,7 +173,7 @@ def subscribe():
 
         if result > 0:
             userId = result['id']
-            #print userId
+            #Add subscription
             cur.execute("""insert into subscriptions (productid, productname, productprice, productimage, userid) values (%s, %s, %s, %s, %s)""", (productId, productName, productPrice, productImage, userId))
         else:
             print 'Could not get user id'

@@ -31,6 +31,7 @@
     <thead>
         <tr>
             <th style="display:none;">Id</th>
+            <th>Subscribed</th>
             <th>Name</th>
             <th>Price</th>
             <th>Image</th>
@@ -41,6 +42,7 @@
         {% for product in productslist %}
         <tr>
             <td style="display:none;">{{ product.id }}</td>
+            <td>{{ product.subscribed }}</td>
             <td>{{ product.name }}</td>
             <td>£{{ product.price }}</td>
             <td><img src="{{ product.image }}" alt="{{ product.name }}"></td>
