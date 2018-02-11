@@ -25,12 +25,20 @@
             $('#listProducts').DataTable(); 
         });*/
         $(document).ready(function() {
-            var table = $('#listProducts').DataTable( {
+            var table = $('#listProducts').DataTable({
                 //"ajax": "data/arrays.txt",
                 "columnDefs": [ {
                 "targets": -1,
                 "data": null,
-                "defaultContent": "<button class='btn btn-success'>Subscribe</button>"
+                //"defaultContent": "<button class='btn btn-success'>Subscribe</button>"
+                "render": function(data, type, full, meta){
+                    if(type === 'display' && full[1] == 'Yes'){
+                        data = '<button class=\'btn btn-danger\'>Unsubscribe</button>';
+                    } else {
+                        data = '<button class=\'btn btn-success\'>Subscribe</button>';
+                    }
+                    return data;
+                 }
                 } ]
             });
 
