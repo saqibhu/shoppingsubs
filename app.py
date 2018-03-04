@@ -175,6 +175,7 @@ def subscribe():
         productPrice = request.form['price']
         productId = request.form['id']
         productImage = request.form['image']
+        productSubscribed = request.form['subscribed']
 
         #Get id for user account
         cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
@@ -183,8 +184,12 @@ def subscribe():
 
         if result > 0:
             userId = result['id']
-            #Add subscription
-            cur.execute("""insert into subscriptions (productid, productname, productprice, productimage, userid) values (%s, %s, %s, %s, %s)""", (productId, productName, productPrice, productImage, userId))
+            if productSubscribed == 'No':
+                #Add subscription
+                cur.execute("""insert into subscriptions (productid, productname, productprice, productimage, userid) values (%s, %s, %s, %s, %s)""", (productId, productName, productPrice, productImage, userId))
+            elif productSubscribed == 'Yes':
+                #Remove subscription
+                cur.execute("""delete from subscriptions where userid = '%s' and productid = %s""", (userId, productId))
         else:
             print 'Could not get user id'
     else:
@@ -192,7 +197,11 @@ def subscribe():
 
     conn.commit()
     cur.close()
-    return redirect(url_for('products'))
+
+    #redo the search here to refresh data
+    #maindata.getProducts(productSearch)
+
+    return render_template('products.html')
 
 if __name__ == '__main__':
     APP.run()
